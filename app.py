@@ -129,7 +129,7 @@ def plot_confusion_matrix(y_true, pred, class_names, normalize=False):
         cm_show = np.divide(cm, sums, out=np.zeros(cm.shape, dtype=float), where=sums != 0)
     else:
         cm_show = cm
-    fig, ax = plt.subplots(figsize=(7, 6))
+    fig, ax = plt.subplots(figsize=(5.5, 4.2))
     im = ax.imshow(cm_show, cmap="Greens")
     ax.set_xticks(labels)
     ax.set_yticks(labels)
@@ -150,7 +150,7 @@ def plot_confusion_matrix(y_true, pred, class_names, normalize=False):
 
 def plot_class_distribution(series):
     counts = series.value_counts().sort_values()
-    fig, ax = plt.subplots(figsize=(6, 3.5))
+    fig, ax = plt.subplots(figsize=(5, 2.5))
     ax.barh(counts.index, counts.values, color=TEAL)
     ax.set_xlabel("Number of rows")
     for i, v in enumerate(counts.values):
@@ -165,7 +165,7 @@ def plot_comparison(comp):
     metrics = list(comp.columns)
     x = np.arange(len(names))
     width = 0.8 / len(metrics)
-    fig, ax = plt.subplots(figsize=(10, 4.5))
+    fig, ax = plt.subplots(figsize=(8, 3.2))
     for k, m in enumerate(metrics):
         ax.bar(x + k * width, comp[m].values, width, label=m,
                color=METRIC_COLORS.get(m, GREEN))
@@ -183,24 +183,68 @@ st.set_page_config(page_title="Obesity Level Classifier", layout="wide")
 
 st.markdown("""
 <style>
-.hero {background: linear-gradient(120deg, #2E7D32, #00897B); padding: 28px 32px;
-       border-radius: 14px; margin-bottom: 18px; display: flex; flex-wrap: wrap;
+.hero {background: linear-gradient(120deg, #2E7D32, #00897B); padding: 18px 24px;
+       border-radius: 12px; margin-bottom: 12px; display: flex; flex-wrap: wrap;
        align-items: center; justify-content: space-between; gap: 14px;}
-.hero-icons svg {margin-left: 10px;}
-.fcard {display: flex; gap: 14px; background: #FFFFFF; border-radius: 12px; padding: 16px;
+.hero-icons svg {margin-left: 7px; width: 42px; height: 42px;}
+.fcard {display: flex; gap: 10px; background: #FFFFFF; border-radius: 10px; padding: 10px;
         margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.12);}
 .ficon {background: #2E7D32; border-radius: 12px; padding: 8px; height: 44px;}
 .ftitle {color: #1F2933; font-weight: 700; font-size: 1.05rem; margin-bottom: 4px;}
 .fcard ul {color: #3E4C59; margin: 0; padding-left: 18px; font-size: 0.88rem;}
-.hero h1 {color: #FFFFFF; margin: 0; font-size: 2rem;}
-.hero p {color: #E8F5E9; margin: 6px 0 0 0; font-size: 1.02rem;}
-.mcard {background: #FFFFFF; border-left: 6px solid #2E7D32; border-radius: 10px;
-        padding: 14px 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.12);}
+.hero h1 {color: #FFFFFF; margin: 0; font-size: 1.65rem;}
+.hero p {color: #E8F5E9; margin: 5px 0 0 0; font-size: 0.9rem;}
+.mcard {background: #FFFFFF; border-left: 5px solid #2E7D32; border-radius: 8px;
+        padding: 9px 12px; margin-bottom: 7px; box-shadow: 0 1px 4px rgba(0,0,0,0.12);}
 .mlabel {color: #52606D; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em;}
-.mvalue {color: #1F2933; font-size: 1.7rem; font-weight: 700;}
+.mvalue {color: #1F2933; font-size: 1.35rem; font-weight: 700;}
 .badge {display: inline-block; background: #2E7D32; color: #FFFFFF; padding: 6px 14px;
         border-radius: 20px; font-weight: 600;}
-.footer {color: #7B8794; font-size: 0.85rem; text-align: center; margin-top: 30px;}
+.footer {color: #7B8794; font-size: 0.75rem; text-align: center; margin-top: 14px;}
+
+/* Compact layout: show more dashboard content in the available viewport */
+.block-container {
+    padding-top: 0.8rem !important;
+    padding-bottom: 0.4rem !important;
+    padding-left: 1.4rem !important;
+    padding-right: 1.4rem !important;
+    max-width: 100% !important;
+}
+div[data-testid="stVerticalBlock"] {
+    gap: 0.65rem;
+}
+div[data-testid="stHorizontalBlock"] {
+    gap: 0.8rem;
+}
+section[data-testid="stSidebar"] {
+    min-width: 260px;
+    max-width: 260px;
+}
+section[data-testid="stSidebar"] > div {
+    padding-top: 0.8rem;
+}
+h1 { font-size: 1.65rem !important; }
+h2 { font-size: 1.3rem !important; }
+h3 { font-size: 1.1rem !important; }
+[data-testid="stTabs"] button {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    font-size: 0.9rem;
+}
+[data-testid="stDataFrame"] {
+    font-size: 0.85rem;
+}
+@media (max-width: 900px) {
+    .block-container {
+        padding-left: 0.7rem !important;
+        padding-right: 0.7rem !important;
+    }
+    section[data-testid="stSidebar"] {
+        min-width: 220px;
+        max-width: 220px;
+    }
+}
+
 </style>
 """, unsafe_allow_html=True)
 
