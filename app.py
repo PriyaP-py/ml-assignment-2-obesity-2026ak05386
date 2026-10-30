@@ -4,12 +4,14 @@ Obesity Level Classification - Model Evaluation Dashboard (Streamlit)
 - Upload a test CSV (features + target), choose a model, view metrics,
   confusion matrix / classification report, and compare all five models.
 """
+import json
 from pathlib import Path
 
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import sklearn
 import streamlit as st
 from sklearn.metrics import (accuracy_score, classification_report, confusion_matrix,
                              f1_score, matthews_corrcoef, precision_score,
@@ -213,7 +215,15 @@ st.markdown(
 try:
     models, label_encoder = load_artifacts()
 except Exception as e:
-    st.error(f"Could not load saved models from the 'model' folder: {e}")
+    stamp = MODEL_DIR / "versions.json"
+    saved_with = (json.loads(stamp.read_text()).get("scikit-learn", "unknown")
+                  if stamp.exists() else "unknown (no versions.json: the model files are old)")
+    st.error("Could not load saved models from the 'model' folder.\n\n"
+             f"- scikit-learn installed in this app: {sklearn.__version__}\n"
+             f"- scikit-learn that saved the models: {saved_with}\n\n"
+             "If these differ, retrain with train_models.py, commit the new model/ files, "
+             f"and pin scikit-learn=={sklearn.__version__} in requirements.txt.\n\n"
+             f"Details: {e}")
     st.stop()
 
 class_names = list(label_encoder.classes_)
@@ -233,7 +243,7 @@ if sample_path.exists():
                                data=sample_path.read_bytes(),
                                file_name="test_data.csv", mime="text/csv")
 st.sidebar.markdown("---")
-st.sidebar.caption("Models are pre-trained; nothing is retrained in this app.")
+st.sidebar.caption(f"Models are pre-trained; nothing is retrained in this app. (scikit-learn {sklearn.__version__})")
 
 with st.expander("About this project"):
     st.write(

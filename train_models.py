@@ -8,8 +8,11 @@ Train 5 classifiers on a binary or multi-class CSV, evaluate them, and save:
 Usage:  python train_models.py
 Edit DATA_PATH and TARGET_COL below for your dataset.
 """
+import json
 import os
+import sys
 import joblib
+import sklearn
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
@@ -116,3 +119,9 @@ try:
     print(results.to_markdown(index=False))
 except ImportError:   # tabulate not installed
     print(results.to_string(index=False))
+
+# Version stamp: lets the app show which scikit-learn version saved these models
+with open("model/versions.json", "w") as f:
+    json.dump({"scikit-learn": sklearn.__version__, "joblib": joblib.__version__,
+               "python": sys.version.split()[0]}, f, indent=2)
+print("saved model/versions.json ->", sklearn.__version__)
